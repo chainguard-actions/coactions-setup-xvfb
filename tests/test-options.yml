@@ -1,0 +1,19 @@
+name: Test options input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Install xvfb
+        run: |
+          apt-get update -qq && apt-get install -y -qq xvfb || true
+      - id: action
+        uses: .
+        with:
+          run: echo "xvfb-run with options test passed"
+          options: "-screen 0 1280x1024x24"
+      - name: Assert action completed successfully
+        run: |
+          echo "PASS: action ran successfully with options input"

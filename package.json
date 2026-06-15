@@ -1,0 +1,26 @@
+{
+  "name": "setup-xvfb",
+  "version": "1.0.0",
+  "description": "Run your tests headlessly",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Gabriel Basilio",
+    "email": "gabrielbb0306@gmail.com",
+    "url": "http://github.com/GabrielBB"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.9.1",
+    "@actions/exec": "^1.0.3"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.36.0"
+  }
+}

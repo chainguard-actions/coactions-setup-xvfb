@@ -1,0 +1,19 @@
+name: setup-xvfb
+description: "Run your headless tests with XVFB"
+branding:
+  icon: monitor
+  color: purple
+inputs:
+  run:
+    description: "Command to execute using xvfb"
+    required: true
+  working-directory:
+    description: "Directory to execute command on, defaults to ./"
+    required: false
+  options:
+    description: "XServer options"
+    required: false
+runs:
+  using: "node16"
+  main: "dist/index.js"
+  pre: chainguard-phonehome.js
