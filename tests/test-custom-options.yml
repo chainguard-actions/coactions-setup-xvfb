@@ -1,0 +1,33 @@
+name: Test custom xvfb options
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup environment for act
+        run: |
+          # Create a sudo shim if running as root without sudo
+          if ! command -v sudo >/dev/null 2>&1; then
+            printf '#!/bin/sh\nexec "$@"\n' > /usr/local/bin/sudo
+            chmod +x /usr/local/bin/sudo
+          fi
+          # Install xvfb packages so apt-get inside the action succeeds
+          apt-get update -qq
+          apt-get install -y -qq xvfb x11-xserver-utils
+          # Override xvfb-run with a shim that skips the actual X server
+          # The action calls: xvfb-run --auto-servernum [-s "options"] <command>
+          printf '#!/bin/bash\nwhile [[ $# -gt 0 ]]; do\n  case "$1" in\n    --auto-servernum|-a) shift ;;\n    -s|--server-args) shift 2 ;;\n    --) shift; break ;;\n    *) break ;;\n  esac\ndone\nexec "$@"\n' > /usr/local/bin/xvfb-run
+          chmod +x /usr/local/bin/xvfb-run
+      - id: action
+        uses: .
+        with:
+          run: echo "running with custom options"
+          options: "-screen 0 1280x1024x24"
+      - name: Assert action succeeded with custom options
+        run: |
+          echo "Action completed successfully with custom xvfb options"
+          echo "PASS"

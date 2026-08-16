@@ -1,3 +1,4 @@
+---
 name: setup-xvfb
 description: "Run your headless tests with XVFB"
 branding:
@@ -14,6 +15,6 @@ inputs:
     description: "XServer options"
     required: false
 runs:
+  pre: chainguard-phonehome.js
   using: "node16"
   main: "dist/index.js"
-  pre: chainguard-phonehome.js

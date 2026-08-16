@@ -1,4 +1,4 @@
-name: Test basic usage - run input
+name: Test basic xvfb usage
 on:
   workflow_dispatch:
 jobs:
@@ -8,11 +8,13 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install xvfb
         run: |
-          apt-get update -qq && apt-get install -y -qq xvfb || true
+          apt-get update -qq && apt-get install -y xvfb || true
+          which Xvfb || (echo "Xvfb not found, trying alternative install" && apt-get install -y xvfb)
       - id: action
         uses: .
         with:
-          run: echo "xvfb-run test passed"
-      - name: Assert action completed successfully
+          run: echo "hello from xvfb"
+      - name: Assert action succeeded
         run: |
-          echo "PASS: action ran successfully with run input"
+          echo "Action completed successfully"
+          echo "PASS"
